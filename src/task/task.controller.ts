@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -12,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { TaskStatus } from './task.model';
+//import { TaskStatus } from './task.model';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 
@@ -20,7 +21,12 @@ import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 export class TaskController {
   constructor(private taskService: TaskService) {}
 
-  @Get()
+  @Get('/:id')
+  getTaskById(@Param('id', ParseIntPipe) id: number) {
+    return this.taskService.getTaskById(id);
+  }
+
+  /*   @Get()
   getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto) {
     if (Object.keys(filterDto).length) {
       return this.taskService.getFilteredTasks(filterDto);
@@ -52,5 +58,5 @@ export class TaskController {
   @Delete('/:id')
   deleteTask(@Param('id') id: string) {
     this.taskService.deleteTask(id);
-  }
+  } */
 }
