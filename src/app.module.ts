@@ -5,7 +5,7 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [TaskModule, TypeOrmModule.forRoot(typeOrmConfig), AuthModule],
+  imports: [TypeOrmModule.forRoot(typeOrmConfig), TaskModule, AuthModule],
   controllers: [],
   providers: [],
 })
