@@ -20,6 +20,8 @@ import { TaskStatusValidationPipe } from './pipes/task-status-validation.pipe';
 import { TaskStatus } from './task-status.enum';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/auth/user.entity';
+import { GetUser } from 'src/auth/get-user.decorator';
 
 @UseGuards(AuthGuard())
 @Controller('tasks')
@@ -27,32 +29,36 @@ export class TaskController {
   constructor(private taskService: TaskService) {}
 
   @Get()
-  getTasks(@Query(ValidationPipe) filterDto: GetTasksFilterDto) {
-    return this.taskService.getTasks(filterDto);
+  getTasks(
+    @Query(ValidationPipe) filterDto: GetTasksFilterDto,
+    @GetUser() user: User,
+  ) {
+    return this.taskService.getTasks(filterDto, user);
   }
 
   @Get('/:id')
-  getTaskById(@Param('id', ParseIntPipe) id: number) {
-    return this.taskService.getTaskById(id);
+  getTaskById(@Param('id', ParseIntPipe) id: number, @GetUser() user: User) {
+    return this.taskService.getTaskById(id, user);
   }
 
   @Post()
   @UsePipes(ValidationPipe)
-  createTask(@Body() createTaskDto: CreateTaskDto) {
-    return this.taskService.createTask(createTaskDto);
+  createTask(@Body() createTaskDto: CreateTaskDto, @GetUser() user: User) {
+    return this.taskService.createTask(createTaskDto, user);
   }
 
   @Delete('/:id')
-  deleteTask(@Param('id', ParseIntPipe) id: number) {
-    this.taskService.deleteTask(id);
+  deleteTask(@Param('id', ParseIntPipe) id: number, @GetUser() user: User) {
+    this.taskService.deleteTask(id, user);
   }
 
   @Patch('/:id/status')
   updateTaskStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', TaskStatusValidationPipe) status: TaskStatus,
+    @GetUser() user: User,
   ) {
-    return this.taskService.updateTaskStatus(id, status);
+    return this.taskService.updateTaskStatus(id, status, user);
   }
 
   /*   @Get()

@@ -13,4 +13,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   //entities: [path.join(__dirname, '/../**/*.entity.ts')],
   entities: [Task, User],
   synchronize: true,
+  migrations: [],
 };

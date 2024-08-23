@@ -9,6 +9,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 //import { Task } from './task.entity';
 import { TaskStatus } from './task-status.enum';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class TaskService {
@@ -17,13 +18,15 @@ export class TaskService {
     private taskRepository: TaskRepository,
   ) {}
 
-  async getTasks(filterDto: GetTasksFilterDto) {
+  async getTasks(filterDto: GetTasksFilterDto, user: User) {
     console.log('FilterDto: ', filterDto);
-    return this.taskRepository.getTasks(filterDto);
+    return this.taskRepository.getTasks(filterDto, user);
   }
 
-  async getTaskById(id: number) {
-    const found = await this.taskRepository.findOneBy({ id: id });
+  async getTaskById(id: number, user: User) {
+    const found = await this.taskRepository.findOne({
+      where: { id: id, userId: user.id },
+    });
 
     if (!found) {
       throw new NotFoundException(`Task for the id ${id} was not found`);
@@ -32,20 +35,20 @@ export class TaskService {
     return found;
   }
 
-  async createTask(createTaskDto: CreateTaskDto) {
-    return this.taskRepository.createTask(createTaskDto);
+  async createTask(createTaskDto: CreateTaskDto, user: User) {
+    return this.taskRepository.createTask(createTaskDto, user);
   }
 
-  async deleteTask(id: number) {
-    const result = await this.taskRepository.delete(id);
+  async deleteTask(id: number, user: User) {
+    const result = await this.taskRepository.delete({ id, userId: user.id });
 
     if (!result.affected) {
       throw new NotFoundException(`Task for the id ${id} was not found`);
     }
   }
 
-  async updateTaskStatus(id: number, status: TaskStatus) {
-    const task = await this.getTaskById(id);
+  async updateTaskStatus(id: number, status: TaskStatus, user: User) {
+    const task = await this.getTaskById(id, user);
     task.status = status;
     await task.save();
     return task;
