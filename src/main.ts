@@ -6,11 +6,15 @@ import * as config from 'config';
 async function bootstrap() {
   const logger = new Logger('bootstrap');
   const app = await NestFactory.create(AppModule);
-  const serverConfig = config.get('server');
+  const serverConfig: any = config.get('server');
 
   const port = process.env.PORT || serverConfig.port;
 
+  if (process.env.NODE_ENV === 'development') {
+    app.enableCors();
+  }
+
   await app.listen(port);
-  logger.log("Connected to server on port: ", port);
+  logger.log('Connected to server on port: ', port);
 }
 bootstrap();

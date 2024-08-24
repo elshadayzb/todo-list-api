@@ -5,9 +5,9 @@ import { UserRepository } from './user.respository';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
-import * as config from "config";
+import * as config from 'config';
 
-const jwtConfig = config.get('db');
+const jwtConfig: any = config.get('db');
 
 @Module({
   imports: [

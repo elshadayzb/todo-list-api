@@ -2,9 +2,9 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from 'src/auth/user.entity';
 //import path from 'path';
 import { Task } from 'src/task/task.entity';
-import * as config from "config";
+import * as config from 'config';
 
-const dbConfig = config.get('db');
+const dbConfig: any = config.get('db');
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: dbConfig.type, //'postgres',
