@@ -1,7 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { User } from 'src/auth/user.entity';
+import { User } from '../auth/user.entity';
 //import path from 'path';
-import { Task } from 'src/task/task.entity';
+import { Task } from '../task/task.entity';
 import * as config from 'config';
 
 const dbConfig: any = config.get('db');
